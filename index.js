@@ -61,7 +61,7 @@ const main = async () => {
             await exec("npm i mongoose-live")
             addScript({key: "repl", value: "node --experimental-repl-await repl.js", force: true})
 
-            const fileContents = require('repl-template.js')
+            const fileContents = require('./repl-template.js')
         
             if (path) {
                 fileContents.splice(1,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
