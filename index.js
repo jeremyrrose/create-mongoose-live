@@ -15,6 +15,10 @@ const main = async () => {
         message: "\n\nPlease enter the path to your models directory:\nExample: ./models\n(Press Enter to skip.)"
     })
 
+    if (path[0].match(/[A-Za-z]/)) {
+        path = './' + path
+    }
+
     const modelFiles = {}
     if (path) {
         try {

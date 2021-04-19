@@ -12,7 +12,8 @@ const db = null
 // For more information, see: 
 // https://mongoosejs.com/docs/api/mongoose.html#mongoose_Mongoose-connection
 
-const models = {`,
+const models = {
+`,
 `
     // Import any models you wish to have available in the REPL here.
     // Keys in this object will be available as variables in the REPL.
