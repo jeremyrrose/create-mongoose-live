@@ -16,11 +16,13 @@ const main = async () => {
 
     const modelFiles = {}
     try {
-        fs.readdir(path, (err, files) => {
+        fs.readdirSync(path, (err, files) => {
             if (err) {
+                console.log(err)
                 throw new Error(err)
             } else {
                 files.forEach(file => {
+                    console.log(file)
                     const name = file.split('.')[0]
                     modelFiles[name[0].toUpperCase() + name.slice(1)] = file
                 })
