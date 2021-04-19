@@ -4,6 +4,7 @@ const fs = require('fs')
 const { exec } = require('child_process')
 const addScript = require('npm-add-script')
 const {prompt} = require('inquirer')
+const replTemplate = require('./repl-template')
 
 const main = async () => {
 
@@ -60,15 +61,7 @@ const main = async () => {
             await exec("npm i mongoose-live")
             addScript({key: "repl", value: "node --experimental-repl-await repl.js", force: true})
 
-            const replJs = fs.readFileSync('repl-template.js', 'utf8', (e,f) => {
-                if (e) {
-                    throw new Error(e)
-                } else {
-                    return f
-                }
-            })
-        
-            const fileContents = replJs.split('/// SPLIT ///\n')
+            const fileContents = require('repl-template.js')
         
             if (path) {
                 fileContents.splice(1,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
