@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "npx-test": "./index.js"
+    "npx-test": "npm i mongoose-live && node ./index.js"
   },
   "scripts": {
     "start": "npm i mongoose-live && node index.js",
