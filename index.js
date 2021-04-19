@@ -19,12 +19,13 @@ const main = async () => {
     if (db) {
         const dbShort = db.slice(db.match(/[A-Za-z]/).index)
         try {
-            const dbObject = require(process.cwd() + '/' + dbShort)
+            const dbObject = await require(process.cwd() + '/' + dbShort)
             if (dbObject.constructor.name == "NativeConnection") {
                 if (db[0].match(/[A-Za-z]/)) {
                     db = './' + db
                 }
                 dbPath = db
+                await dbObject.close()
             } else {
                 throw new Error("The path provided does not export a Mongoose.connection object.")
             }
@@ -92,7 +93,7 @@ const main = async () => {
             await exec("npm i mongoose-live")
             addScript({key: "repl", value: "node --experimental-repl-await repl.js", force: true})
 
-            fileContents.splice(1,0, dbPath ? `require(${dbPath})` : `null`)
+            fileContents.splice(1,0, dbPath ? `require('${dbPath}')` : `null`)
         
             if (path) {
                 fileContents.splice(3,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
