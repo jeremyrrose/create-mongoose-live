@@ -8,13 +8,24 @@ const {prompt} = require('inquirer')
 const main = async () => {
 
     console.log('Creating REPL for Mongoose project...')
-    const {path} = await prompt({
+    let {path} = await prompt({
         type: "input",
         name: "path",
         message: "Please enter the path to your models directory:\nExample: ./models\n"
     })
 
-    const filenames = fs.readdir(path)
+    const filenames = []
+    try {
+        fs.readdir(path, (err, files) => {
+            if (err) {
+                throw new Error(err)
+            } else {
+                filenames.concat(...files)
+            }
+        })
+    } catch (error) {
+        throw error
+    }
     console.log(filenames)
 
     const {models} = prompt({
