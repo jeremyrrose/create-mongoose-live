@@ -1,6 +1,6 @@
 {
   "name": "create-mongoose-live",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "description": "Generates a template and adds package and script for Mongoose Live REPL.",
   "main": "index.js",
   "bin": {
