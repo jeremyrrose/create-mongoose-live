@@ -17,12 +17,13 @@ const main = async () => {
 
     let dbPath = null
     if (db) {
-        if (db[0].match(/[A-Za-z]/)) {
-            db = './' + db
-        }
+        const dbShort = db.slice(db.match(/[A-Za-z]/).index)
         try {
-            const dbObject = require(db)
+            const dbObject = require(process.cwd() + '/' + dbShort)
             if (dbObject.constructor.name == "NativeConnection") {
+                if (db[0].match(/[A-Za-z]/)) {
+                    db = './' + db
+                }
                 dbPath = db
             } else {
                 throw new Error("The path provided does not export a Mongoose.connection object.")
@@ -94,7 +95,7 @@ const main = async () => {
             fileContents.splice(1,0, dbPath ? `require(${dbPath})` : `null`)
         
             if (path) {
-                fileContents.splice(2,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
+                fileContents.splice(3,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
             }
 
             fs.writeFileSync('repl.js', fileContents.join(''))
