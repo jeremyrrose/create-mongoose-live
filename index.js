@@ -93,7 +93,7 @@ const main = async () => {
             await exec("npm i mongoose-live")
             addScript({key: "repl", value: "node --experimental-repl-await repl.js", force: true})
 
-            fileContents.splice(1,0, dbPath ? `require('${dbPath}')` : `null`)
+            fileContents.splice(1,0, dbPath ? `require('${dbPath}')` : `null // You MUST include a DB connection here to connect.`)
         
             if (path) {
                 fileContents.splice(3,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
@@ -101,7 +101,7 @@ const main = async () => {
 
             fs.writeFileSync('repl.js', fileContents.join(''))
 
-            console.log('\n\nREPL files created!\nEdit repl.js in your root directory to add a DB connection, then type "npm run repl" to start.\n')
+            console.log('\n\nREPL files created!\nEdit repl.js as needed, then type "npm run repl" to start.\n')
 
         } catch (error) {
             console.error(error)

@@ -9,5 +9,4 @@ npx create-mongoose-live
 Follow the prompts and edit `repl.js` as needed.
 
 ## Known Issues
-
-DB connection must be manually configured in `repl.js`.
+Invalid file paths cause errors. If you are unsure of the path to your `mongoose.connection` object or to your models directory, simply press Enter and configure in `repl.js`.
