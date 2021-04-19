@@ -16,38 +16,36 @@ const main = async () => {
 
     const modelFiles = {}
     try {
-        fs.readdirSync(path, (err, files) => {
+        const fileList = fs.readdirSync(path, (err, files) => {
             if (err) {
-                console.log(err)
                 throw new Error(err)
             } else {
-                files.forEach(file => {
-                    console.log(file)
-                    const name = file.split('.')[0]
-                    modelFiles[name[0].toUpperCase() + name.slice(1)] = file
-                })
+                return files
             }
+        })
+
+        fileList.forEach(file => {
+            const name = file.split('.')[0]
+            modelFiles[name[0].toUpperCase() + name.slice(1)] = file
         })
     } catch (error) {
         throw error
     }
-    console.log(modelFiles)
 
     const {models} = await prompt({
         type: "checkbox",
         name: "models",
-        message: "Select models to include in REPL context:\(All available files selected by default.)",
+        message: "Select models to include in REPL context:\n(All available files selected by default.)\n",
         loop: false,
         choices: Object.keys(modelFiles).map(key => {
-            return {name: `${key} : ${modelFiles[key]}`, value: key}
+            return {name: `${key} : ${modelFiles[key]}`, value: key, checked: true}
         })
     })
-
 
     const {proceed} = await prompt({
         type: "confirm",
         name: "proceed",
-        message: "This will create repl.js, add a small node module, and add a script to package.json.\nProceed?",
+        message: "\nWarning:\nThis will create repl.js, add a small node module, and add a script to package.json.\nProceed?",
         default: false
     })
 
