@@ -6,8 +6,9 @@ module.exports = [
 // Imports the Mongoose Live REPL package
 const live = require('mongoose-live')
 
-const db = null
-// Replace null with a mongoose.connection object here.
+const db = `,
+`
+// Import or establish a mongoose.connection object here.
 // Many projects export this object from a file; this may be imported here.
 // For more information, see: 
 // https://mongoosejs.com/docs/api/mongoose.html#mongoose_Mongoose-connection

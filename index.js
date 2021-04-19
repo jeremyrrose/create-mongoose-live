@@ -4,15 +4,41 @@ const fs = require('fs')
 const { exec } = require('child_process')
 const addScript = require('npm-add-script')
 const {prompt} = require('inquirer')
-const replTemplate = require('./repl-template')
+const fileContents = require('./repl-template.js')
 
 const main = async () => {
 
-    console.log('Creating REPL for Mongoose project...')
+    console.log('\nCreating REPL for Mongoose project...\n')
+    let {db} = await prompt({
+        type: "input",
+        name: "db",
+        message: "\n\nCONFIGURE DATABASE:\nDoes your project include a file or directory that exports a Mongoose.connection object?\nIf so, please enter the path to that file here:\nExample: ./db\n(Press Enter to skip and configure later.)"
+    })
+
+    let dbPath = null
+    if (db) {
+        if (db[0].match(/[A-Za-z]/)) {
+            db = './' + db
+        }
+        try {
+            const dbObject = require(db)
+            if (dbObject.constructor.name == "NativeConnection") {
+                dbPath = db
+            } else {
+                throw new Error("The path provided does not export a Mongoose.connection object.")
+            }
+        } catch (error) {
+            console.error(error)
+            console.error("\nThe DB connection could not be established. Please configure in repl.js.")
+        }
+    } else {
+        console.log('\n\nPlease configure your DB connection later in repl.js.\n')
+    }
+
     let {path} = await prompt({
         type: "input",
         name: "path",
-        message: "\n\nPlease enter the path to your models directory:\nExample: ./models\n(Press Enter to skip.)"
+        message: "\n\nCONFIGURE MODELS:\nPlease enter the path to your models directory:\nExample: ./models\n(Press Enter to skip.)"
     })
 
     if (path[0].match(/[A-Za-z]/)) {
@@ -65,10 +91,10 @@ const main = async () => {
             await exec("npm i mongoose-live")
             addScript({key: "repl", value: "node --experimental-repl-await repl.js", force: true})
 
-            const fileContents = require('./repl-template.js')
+            fileContents.splice(1,0, dbPath ? `require(${dbPath})` : `null`)
         
             if (path) {
-                fileContents.splice(1,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
+                fileContents.splice(2,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
             }
 
             fs.writeFileSync('repl.js', fileContents.join(''))
