@@ -1,19 +1,18 @@
 {
-  "name": "create-mongoose-repl",
+  "name": "create-mongoose-live",
   "version": "0.0.1",
-  "description": "",
+  "description": "Generates a template and adds package and script for Mongoose Live REPL.",
   "main": "index.js",
   "bin": {
-    "npx-test": "./index.js"
+    "create-mongoose-live": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Jeremy Rose",
   "license": "ISC",
   "dependencies": {
     "inquirer": "^8.0.0",
-    "mongoose-live": "0.0.14",
     "npm-add-script": "^1.1.0"
   }
 }
