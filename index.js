@@ -14,25 +14,31 @@ const main = async () => {
         message: "Please enter the path to your models directory:\nExample: ./models\n"
     })
 
-    const filenames = []
+    const modelFiles = {}
     try {
         fs.readdir(path, (err, files) => {
             if (err) {
                 throw new Error(err)
             } else {
-                filenames.concat(...files)
+                files.forEach(file => {
+                    const name = file.split('.')[0]
+                    modelFiles[name[0].toUpperCase() + name.slice(1)] = file
+                })
             }
         })
     } catch (error) {
         throw error
     }
-    console.log(filenames)
+    console.log(modelFiles)
 
-    const {models} = prompt({
+    const {models} = await prompt({
         type: "checkbox",
         name: "models",
         message: "Select models to include in REPL context:\(All available files selected by default.)",
-        loop: false
+        loop: false,
+        choices: Object.keys(modelFiles).map(key => {
+            return {name: `${key} : ${modelFiles[key]}`, value: key}
+        })
     })
 
 
