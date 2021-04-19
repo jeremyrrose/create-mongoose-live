@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "bin":"./index.js",
   "scripts": {
     "start": "npm i mongoose-live && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
