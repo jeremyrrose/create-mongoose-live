@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "inquirer": "^8.0.0",
+    "mongoose-live": "0.0.14",
     "npm-add-script": "^1.1.0"
   }
 }
