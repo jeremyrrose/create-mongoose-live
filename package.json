@@ -1,6 +1,6 @@
 {
   "name": "create-mongoose-live",
-  "version": "0.0.14",
+  "version": "0.0.2",
   "description": "Generates a template and adds package and script for Mongoose Live REPL.",
   "homepage": "https://github.com/jeremyrrose/create-mongoose-live",
   "repository": {
