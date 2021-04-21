@@ -1,7 +1,12 @@
 {
   "name": "create-mongoose-live",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Generates a template and adds package and script for Mongoose Live REPL.",
+  "homepage": "https://github.com/jeremyrrose/create-mongoose-live",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremyrrose/create-mongoose-live.git"
+  },
   "main": "index.js",
   "bin": {
     "create-mongoose-live": "./index.js"
@@ -9,7 +14,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Jeremy Rose",
+  "author": {
+    "name": "Jeremy Rose",
+    "email": "jeremy.r.rose@gmail.com"
+  },
   "license": "ISC",
   "dependencies": {
     "inquirer": "^8.0.0",
