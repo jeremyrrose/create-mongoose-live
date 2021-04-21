@@ -3,13 +3,13 @@
 const fs = require('fs')
 const { exec } = require('child_process')
 const addScript = require('npm-add-script')
-const {prompt} = require('inquirer')
+const { prompt } = require('inquirer')
 const fileContents = require('./repl-template.js')
 
 const main = async () => {
 
     console.log('\nCreating REPL for Mongoose project...\n')
-    let {db} = await prompt({
+    let { db } = await prompt({
         type: "input",
         name: "db",
         message: "\n\nCONFIGURE DATABASE:\nDoes your project include a file or directory that exports a Mongoose.connection object?\nIf so, please enter the path to that file here:\nExample: ./db\n(Press Enter to skip and configure later.)"
@@ -37,7 +37,7 @@ const main = async () => {
         console.log('\n\nPlease configure your DB connection later in repl.js.\n')
     }
 
-    let {path} = await prompt({
+    let { path } = await prompt({
         type: "input",
         name: "path",
         message: "\n\nCONFIGURE MODELS:\nPlease enter the path to your models directory:\nExample: ./models\n(Press Enter to skip.)"
@@ -67,7 +67,7 @@ const main = async () => {
             process.exit(1)
         }
 
-        var {models} = await prompt({
+        var { models } = await prompt({
             type: "checkbox",
             name: "models",
             message: "\n\nSelect models to include in REPL context:\n(All available files selected by default.)\n",
@@ -80,7 +80,7 @@ const main = async () => {
         console.log('\nNo models directory provided. Please edit repl.js to configure.\n')
     }
 
-    const {proceed} = await prompt({
+    const { proceed } = await prompt({
         type: "confirm",
         name: "proceed",
         message: "\n\nWarning:\nThis will create repl.js, add a small node module, and add a script to package.json.\nProceed?",
@@ -93,7 +93,7 @@ const main = async () => {
             await exec("npm i mongoose-live")
             addScript({key: "repl", value: "node --experimental-repl-await repl.js", force: true})
 
-            fileContents.splice(1,0, dbPath ? `require('${dbPath}')` : `null // You MUST include a DB connection here to connect.`)
+            fileContents.splice(1,0, dbPath ? `await require('${dbPath}')` : `null // You MUST include a DB connection here to connect.`)
         
             if (path) {
                 fileContents.splice(3,0,models.map(key => `    ${key} : require('${path}/${modelFiles[key]}'),\n`).join(''))
