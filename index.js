@@ -5,14 +5,15 @@ const { exec } = require('child_process')
 const addScript = require('npm-add-script')
 const { prompt } = require('inquirer')
 const fileContents = require('./repl-template.js')
+const style = require('ansi-styles')
 
 const main = async () => {
 
-    console.log('\nCreating REPL for Mongoose project...\n')
+    console.log(`\n\n${style.magenta.open}Creating REPL for Mongoose project${style.magenta.close}...\n`)
     let { db } = await prompt({
         type: "input",
         name: "db",
-        message: "\n\nCONFIGURE DATABASE:\nDoes your project include a file or directory that exports a Mongoose.connection object?\nIf so, please enter the path to that file here:\nExample: ./db\n(Press Enter to skip and configure later.)"
+        message: `${style.green.open}CONFIGURE DATABASE:${style.green.close}\nDoes your project include a file or directory that exports a ${style.green.open}Mongoose.connection${style.green.close} object?\n${style.blue.open}If so, please enter the path to that file below:${style.blue.close}\nExample: ./db\n${style.dim.open}(Press Enter to skip and configure later.)${style.dim.close}\n`
     })
 
     let dbPath = null
@@ -27,23 +28,25 @@ const main = async () => {
                 dbPath = db
                 await dbObject.close()
             } else {
-                throw new Error("The path provided does not export a Mongoose.connection object.")
+                throw new Error(`${style.red.open}The path provided does not export a Mongoose.connection object.${style.red.close}`)
             }
         } catch (error) {
             console.error(error)
-            console.error("\nThe DB connection could not be established. Please configure in repl.js.")
+            console.error(`${style.red.open}The DB connection could not be established. Please configure in repl.js.${style.red.close}`)
         }
     } else {
-        console.log('\n\nPlease configure your DB connection later in repl.js.\n')
+        console.log('Please configure your DB connection later in repl.js.')
     }
+
+    console.log('\n\n')
 
     let { path } = await prompt({
         type: "input",
         name: "path",
-        message: "\n\nCONFIGURE MODELS:\nPlease enter the path to your models directory:\nExample: ./models\n(Press Enter to skip.)"
+        message: `${style.green.open}CONFIGURE MODELS:${style.green.close}\nPlease enter the path to your models directory:\nExample: ./models\n${style.dim.open}(Press Enter to skip.)${style.dim.close}`
     })
 
-    if (path[0].match(/[A-Za-z]/)) {
+    if (path && path[0].match(/[A-Za-z]/)) {
         path = './' + path
     }
 
@@ -60,17 +63,21 @@ const main = async () => {
 
             fileList.forEach(file => {
                 const name = file.split('.')[0]
-                modelFiles[name[0].toUpperCase() + name.slice(1)] = file
+                if (name[0]){
+                    modelFiles[name[0].toUpperCase() + name.slice(1)] = file
+                }
             })
         } catch (error) {
             console.error(error)
             process.exit(1)
         }
 
+        console.log('\n\n')
+
         var { models } = await prompt({
             type: "checkbox",
             name: "models",
-            message: "\n\nSelect models to include in REPL context:\n(All available files selected by default.)\n",
+            message: `${style.blue.open}Select models to include in REPL context and press ${style.dim.open}ENTER${style.dim.close} to continue:${style.blue.close}\n${style.dim.open}(All available files selected by default.)${style.dim.close}\n`,
             loop: false,
             choices: Object.keys(modelFiles).map(key => {
                 return {name: `${key} : ${modelFiles[key]}`, value: key, checked: true}
@@ -80,10 +87,12 @@ const main = async () => {
         console.log('\nNo models directory provided. Please edit repl.js to configure.\n')
     }
 
+    console.log('\n\n')
+
     const { proceed } = await prompt({
         type: "confirm",
         name: "proceed",
-        message: "\n\nWarning:\nThis will create repl.js, add a small node module, and add a script to package.json.\nProceed?",
+        message: `${style.yellow.open}Warning:${style.yellow.close}\nThis will create ${style.green.open}repl.js${style.green.close}, add a small node module, and add a script to ${style.green.open}package.json${style.green.close}.\nProceed?`,
         default: false
     })
 
