@@ -13,7 +13,7 @@ const main = async () => {
     let { db } = await prompt({
         type: "input",
         name: "db",
-        message: `${style.green.open}CONFIGURE DATABASE:${style.green.close}\nDoes your project include a file or directory that exports a ${style.green.open}Mongoose.connection${style.green.close} object?\n${style.blue.open}If so, please enter the path to that file below:${style.blue.close}\nExample: ./db\n${style.dim.open}(Press Enter to skip and configure later.)${style.dim.close}\n`
+        message: `${style.green.open}CONFIGURE DATABASE:${style.green.close}\nDoes your project include a file or directory that exports a ${style.green.open}Mongoose.connection${style.green.close} object?\n${style.blue.open}If so, please enter the path to that file below:${style.blue.close}\nExample: ./db/connection.js\n${style.dim.open}(Press Enter to skip and configure later.)${style.dim.close}\n`
     })
 
     let dbPath = null
